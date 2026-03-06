@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Talks Today</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0 1em;
+        }
+        header {
+            text-align: center;
+            padding: 2em 0;
+        }
+        h1 {
+            color: #007bff;
+        }
+        .search-container {
+            margin-bottom: 2em;
+        }
+        #searchInput {
+            width: 80%;
+            max-width: 400px;
+            padding: 0.8em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .schedule-item {
+            background-color: #fff;
+            border-left: 5px solid #007bff;
+            padding: 1.5em;
+            margin-bottom: 1.5em;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .schedule-item.break {
+            border-left-color: #6c757d;
+        }
+        .schedule-item h2 {
+            margin-top: 0;
+            color: #0056b3;
+        }
+        .schedule-item .time {
+            font-weight: bold;
+            color: #6c757d;
+            margin-bottom: 1em;
+        }
+        .schedule-item .speakers {
+            font-style: italic;
+            margin-bottom: 1em;
+        }
+        .schedule-item .categories span {
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 0.3em 0.7em;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-right: 0.5em;
+        }
+        .schedule-item .description {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tech Talks Today</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search by category...">
+        </div>
+    </header>
+    <main id="schedule">
+        <!-- Schedule will be dynamically generated here -->
+    </main>
+
+    <script>
+        const talks = [
+            {
+                title: "The Future of Artificial Intelligence",
+                speakers: ["Dr. Evelyn Reed"],
+                categories: ["AI", "Machine Learning", "Future Tech"],
+                description: "A deep dive into the latest advancements in AI and what they mean for the future of technology and society."
+            },
+            {
+                title: "Building Scalable Web Applications",
+                speakers: ["John Smith", "Jane Doe"],
+                categories: ["Web Development", "Scalability", "Architecture"],
+                description: "Learn the principles and practices for building web applications that can handle millions of users."
+            },
+            {
+                title: "Cybersecurity in a Post-Quantum World",
+                speakers: ["Dr. Alan Grant"],
+                categories: ["Cybersecurity", "Quantum Computing", "Cryptography"],
+                description: "An exploration of the threats quantum computing poses to current cybersecurity standards and how to prepare for them."
+            },
+            {
+                title: "The Power of Storytelling in Product Design",
+                speakers: ["Emily Carter"],
+                categories: ["UX", "Design", "Product Management"],
+                description: "Discover how to use storytelling to create more engaging and user-friendly products."
+            },
+            {
+                title: "A Practical Guide to DevOps",
+                speakers: ["Michael Chen", "Sarah Lee"],
+                categories: ["DevOps", "CI/CD", "Cloud Computing"],
+                description: "From continuous integration to continuous deployment, this talk covers the essential tools and practices for a successful DevOps culture."
+            },
+            {
+                title: "The Ethics of Gene Editing",
+                speakers: ["Dr. Olivia Martinez"],
+                categories: ["Biotechnology", "Ethics", "Genetics"],
+                description: "A thought-provoking discussion on the ethical implications of CRISPR and other gene-editing technologies."
+            }
+        ];
+
+        const scheduleTimings = [
+            "10:00 AM - 11:00 AM",
+            "11:10 AM - 12:10 PM",
+            "12:20 PM - 1:20 PM",
+            "2:20 PM - 3:20 PM",
+            "3:30 PM - 4:30 PM",
+            "4:40 PM - 5:40 PM"
+        ];
+
+        function renderSchedule(filteredTalks) {
+            const scheduleContainer = document.getElementById('schedule');
+            scheduleContainer.innerHTML = '';
+            let talkIndex = 0;
+
+            const createTalkElement = (talk, time) => {
+                const talkElement = document.createElement('div');
+                talkElement.className = 'schedule-item';
+                talkElement.innerHTML = `
+                    <div class="time">${time}</div>
+                    <h2>${talk.title}</h2>
+                    <div class="speakers">${talk.speakers.join(', ')}</div>
+                    <div class="categories">${talk.categories.map(cat => `<span>${cat}</span>`).join('')}</div>
+                    <p class="description">${talk.description}</p>
+                `;
+                return talkElement;
+            };
+
+            const createBreakElement = (time, text) => {
+                const breakElement = document.createElement('div');
+                breakElement.className = 'schedule-item break';
+                breakElement.innerHTML = `
+                    <div class="time">${time}</div>
+                    <h2>${text}</h2>
+                `;
+                return breakElement;
+            };
+            
+            const talksToRender = filteredTalks.map((talk, i) => ({...talk, time: scheduleTimings[i]}));
+
+            if (talksToRender.length > 0) scheduleContainer.appendChild(createTalkElement(talksToRender[0], talksToRender[0].time));
+            if (talksToRender.length > 1) {
+                scheduleContainer.appendChild(createBreakElement("11:00 AM - 11:10 AM", "Transition"));
+                scheduleContainer.appendChild(createTalkElement(talksToRender[1], talksToRender[1].time));
+            }
+            if (talksToRender.length > 2) {
+                scheduleContainer.appendChild(createBreakElement("12:10 PM - 12:20 PM", "Transition"));
+                scheduleContainer.appendChild(createTalkElement(talksToRender[2], talksToRender[2].time));
+            }
+
+            scheduleContainer.appendChild(createBreakElement("1:20 PM - 2:20 PM", "Lunch Break"));
+
+            if (talksToRender.length > 3) {
+                scheduleContainer.appendChild(createTalkElement(talksToRender[3], talksToRender[3].time));
+                scheduleContainer.appendChild(createBreakElement("3:20 PM - 3:30 PM", "Transition"));
+            }
+            if (talksToRender.length > 4) {
+                scheduleContainer.appendChild(createTalkElement(talksToRender[4], talksToRender[4].time));
+                scheduleContainer.appendChild(createBreakElement("4:30 PM - 4:40 PM", "Transition"));
+            }
+            if (talksToRender.length > 5) {
+                scheduleContainer.appendChild(createTalkElement(talksToRender[5], talksToRender[5].time));
+            }
+
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredTalks = talks.filter(talk => 
+                talk.categories.some(category => category.toLowerCase().includes(searchTerm))
+            );
+            renderSchedule(filteredTalks);
+        });
+
+        // Initial render
+        renderSchedule(talks);
+    </script>
+</body>
+</html>
